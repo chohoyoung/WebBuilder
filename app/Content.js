@@ -7,6 +7,7 @@ import {DropTarget} from 'react-dnd';
 
 import Item from './Item';
 
+
 const ContainerSpec = {
     drop(props, monitor, component) {
         const item = monitor.getItem();
@@ -15,7 +16,15 @@ const ContainerSpec = {
         const top = Math.round(item.top + delta.y);
 
         component.moveItem(left, top);
-    }
+    },
+    canDrop: function (props, monitor) {
+
+        var item = monitor.getItem();
+        const delta = monitor.getDifferenceFromInitialOffset();
+        console.log(delta.x);
+        console.log(delta.y);
+    },
+
 };
 
 let collect = (connect, monitor)=> {
@@ -44,7 +53,7 @@ class Content extends Component {
         const { hideSourceOnDrag, connectDropTarget } = this.props;
         return connectDropTarget(
             <section className="about text-center" id="about" style={{height: "500px", position: 'relative'}} >
-                <Item left={this.state.left} top={this.state.top}/>
+                <Item left={this.state.left} top={this.state.top} />
             </section>
         );
     }
