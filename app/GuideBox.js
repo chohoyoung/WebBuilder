@@ -14,9 +14,14 @@ const style = {
 
 // 드레그 시작시 호출
 const guideBoxSpec = {
+    // beginDrag에서 리턴한 값이 target의 drop에서 받는 getItem() 값이다. props는 현재 compoenent의 this.props를 넘겨준다. Can일경우 움직일때마다 루프
     beginDrag: function (props) {
-        const { id, left, top } = props;
-        return { id, left, top };
+        const {guideBoxPos: pos} = props;
+        const guideBoxPos = {
+            guideBoxColonPos: props.guideBoxColonPos,
+            guideBoxLayoutPos: props.guideBoxLayoutPos
+        }
+        return guideBoxPos;
     }
 }
 
@@ -28,32 +33,30 @@ let collect = (connect, monitor) => {
     }
 }
 
-class GuideBox extends Component {
-    setGuideBoxPos() {
-        this.props.setGuideBoxPos({
-            tl : {left: 0, top: 0},
-            tc : {left: 100, top: 0},
-            tr : {left: 200, top: 0},
-            l : {left: 0, top: 100},
-            r : {left: 200, top: 100},
-            bl : {left: 0, top: 200},
-            bc : {left: 100, top: 200},
-            br : {left: 200, top: 200}
-        });
+// GuideBox Reduce와 props 연계
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        guideBoxColonPos: state.guideBox.colon,
+        guideBoxLayoutPos: state.guideBox.layout
     }
+}
+
+class GuideBox extends Component {
 
     render() {
-        console.log(this.props.guideBoxPos);
+        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, children, guideBoxColonPos, guideBoxLayoutPos } = this.props;
 
-        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, children } = this.props;
+        if (isDragging) {
+            return null;
+        }
 
         return connectDragSource(
-            <div className="guild-layout" >
-                <span class="top-left-resize-cursor guide-handle"></span>
-
+            <div className="guide-layout" style={{ left:guideBoxLayoutPos.left, top:guideBoxLayoutPos.top }}>
+                {Object.keys(guideBoxColonPos).map((key, idx) => <span key={idx} className="top-left-resize-cursor guide-handle" style={{ left:guideBoxColonPos[key].left, top:guideBoxColonPos[key].top }}></span>)}
             </div>
         );
     }
 }
 
-export default DragSource("Item", guideBoxSpec, collect)(GuideBox);
+export default connect(mapStateToProps)(DragSource("Item", guideBoxSpec, collect)(GuideBox));

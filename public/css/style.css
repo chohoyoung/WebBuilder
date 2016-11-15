@@ -15,9 +15,11 @@ h1, h2{
 }
 
 /* guideLine area by hycho */
-.guild-layout {
+.guide-layout {
     position: absolute;
     border: 1px solid #3899ec;
+    width: 200px;
+    height: 200px;
 }
 
 .top-left-resize-cursor {

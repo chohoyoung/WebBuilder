@@ -17,9 +17,6 @@ const itemSpec = {
     beginDrag: function (props) {
         const { id, left, top } = props;
         return { id, left, top };
-    },
-    isDragging(props, monitor) {
-        console.log(props)
     }
 }
 
@@ -58,8 +55,6 @@ class Item extends Component {
     }
 
     render() {
-        console.log(this.props.guideBoxPos);
-
         const { hideSourceOnDrag, left, top, connectDragSource, isDragging, children } = this.props;
 
         if (isDragging) {

@@ -7,21 +7,34 @@ import {DropTarget} from 'react-dnd';
 import {connect} from 'react-redux';
 
 import Item from './Item';
+import GuideBox from './GuideBox';
+import * as actions from './actions';
 
 const ContainerSpec = {
+    // canDrop이 있으면 drop은 동작안한다.
     drop(props, monitor, component) {
         const item = monitor.getItem();
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
 
-        component.moveItem(left, top);
+        // console.log(item);
+        // console.log(monitor);
+        // component.moveItem(left, top);
     },
     canDrop: function (props, monitor) {
         let item = monitor.getItem();
         const delta = monitor.getDifferenceFromInitialOffset();
-        console.log(delta.x);
-        console.log(delta.y);
+
+        let guideBoxLayoutPos = {
+            left : item.guideBoxLayoutPos["left"] + delta.x,
+            top : item.guideBoxLayoutPos["top"] + delta.y
+        };
+
+        props.moveGuideBoxPos({
+            "layout": guideBoxLayoutPos,
+            "colon": item.guideBoxColonPos
+        });
     }
 
 };
@@ -39,30 +52,28 @@ const mapStateToProps = (state) => {
     }
 }
 
+// dispatch메소드를 연결
+const mapDispatchToProps = (dispatch) => {
+    return {
+        moveGuideBoxPos: (pos) => { dispatch(actions.setGuideBoxPos(pos)) }
+    }
+}
+
 class Content extends Component {
     constructor() {
         super(...arguments);
-        this.state = {
-            left : 350,
-            top : 350
-        };
-    }
-
-    moveItem(left, top) {
-        this.setState({
-            left : left,
-            top : top
-        });
     }
 
     render() {
         const { hideSourceOnDrag, connectDropTarget } = this.props;
+
         return connectDropTarget(
             <section className="about text-center" id="about" style={{height: "500px", position: 'relative'}} >
-                {this.props.items.map((item) => <Item left={item.left} top={item.top} />)}
+                {this.props.items.map((item) => <Item key={item.id} left={item.left} top={item.top} />)}
+                <GuideBox />
             </section>
         );
     }
 }
 
-export default connect(mapStateToProps)(DragDropContext(HTML5Backend)(DropTarget("Item", ContainerSpec, collect)(Content)));
+export default connect(mapStateToProps, mapDispatchToProps)(DragDropContext(HTML5Backend)(DropTarget("Item", ContainerSpec, collect)(Content)));

@@ -1,10 +1,10 @@
 import * as constants from './ActionConstants';
 
 // Guide Action
-export function setGuideBoxPos(pos) {
+export function setGuideBoxPos(guildBox) {
     return {
         type: constants.SET_GUIDEBOX_POS,
-        pos
+        guildBox
     };
 }
 
