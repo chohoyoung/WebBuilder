@@ -18,9 +18,6 @@ const itemSpec = {
         const { id, left, top } = props;
         return { id, left, top };
     },
-    // canDrag(props, monitor) {
-    //     console.log(props);
-    // },
     isDragging(props, monitor) {
         console.log(props)
     }
@@ -48,7 +45,7 @@ const mapDispatchToProps = (dispatch) => {
 class Item extends Component {
     setGuideBoxPos() {
         console.log(this)
-        this.props.setGuidBoxPos({
+        this.props.setGuideBoxPos({
             tl : {x:10, y:0},
             tc : {x:10, y:0},
             tr : {x:10, y:0},
