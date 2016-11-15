@@ -1,0 +1,2 @@
+export const SET_GUIDEBOX_POS = "SET_GUIDEBOX_POS";
+export const SET_ITEM_FOCUS = "SET_ITEM_FOCUS";
