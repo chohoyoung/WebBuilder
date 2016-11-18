@@ -1,3 +1,7 @@
+* {margin:0 ;padding:0;}
+
+div {margin:0;padding:0;}
+
 body{
 	margin: 0;
 	padding: 0;
@@ -20,6 +24,8 @@ h1, h2{
     border: 1px solid #3899ec;
     width: 200px;
     height: 200px;
+    backgroundColor: 'white';
+	cursor: move;
 }
 
 .top-left-resize-cursor {

@@ -19,7 +19,8 @@ const guideBoxSpec = {
         const {guideBoxPos: pos} = props;
         const guideBoxPos = {
             guideBoxColonPos: props.guideBoxColonPos,
-            guideBoxLayoutPos: props.guideBoxLayoutPos
+            guideBoxLayoutPos: props.guideBoxLayoutPos,
+            isShow: props.isShow
         }
         return guideBoxPos;
     }
@@ -29,31 +30,46 @@ const guideBoxSpec = {
 let collect = (connect, monitor) => {
     return {
         connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     }
 }
 
 // GuideBox Reduce와 props 연계
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         guideBoxColonPos: state.guideBox.colon,
-        guideBoxLayoutPos: state.guideBox.layout
+        guideBoxLayoutPos: state.guideBox.layout,
+        isShow: state.guideBox.isShow
     }
+}
+
+// GuideBox의 Layout의 style을 구축해서 리턴해준다.
+let getPosStyles = (props) => {
+    const { guideBoxColonPos } = props;
+    const transform = `translate3d(${props.guideBoxLayoutPos.left}px, ${props.guideBoxLayoutPos.top}px, 0)`;
+
+    return {
+        position: 'absolute',
+        width: props.guideBoxLayoutPos.width,
+        height: props.guideBoxLayoutPos.height,
+        transform: transform,
+        WebkitTransform: transform
+    };
 }
 
 class GuideBox extends Component {
 
     render() {
-        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, children, guideBoxColonPos, guideBoxLayoutPos } = this.props;
+        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, guideBoxColonPos, guideBoxLayoutPos, isShow, text} = this.props;
 
-        if (isDragging) {
+        if (isDragging || !isShow) {
             return null;
         }
 
         return connectDragSource(
-            <div className="guide-layout" style={{ left:guideBoxLayoutPos.left, top:guideBoxLayoutPos.top }}>
-                {Object.keys(guideBoxColonPos).map((key, idx) => <span key={idx} className="top-left-resize-cursor guide-handle" style={{ left:guideBoxColonPos[key].left, top:guideBoxColonPos[key].top }}></span>)}
+            <div className="guide-layout" style={getPosStyles(this.props)}>
+                {/* Object.keys(guideBoxColonPos).map((key, idx) => <span key={idx} id={idx} className="top-left-resize-cursor guide-handle" style={{ left:guideBoxColonPos[key].left, top:guideBoxColonPos[key].top }}></span>) */}
             </div>
         );
     }

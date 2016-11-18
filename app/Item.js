@@ -12,21 +12,6 @@ const style = {
     border: "1px solid #000"
 };
 
-// itemSpec
-const itemSpec = {
-    beginDrag: function (props) {
-        const { id, left, top } = props;
-        return { id, left, top };
-    }
-}
-
-let collect = (connect, monitor) => {
-    return {
-        connectDragSource: connect.dragSource(),
-        isDragging: monitor.isDragging()
-    }
-}
-
 const mapStateToProps = (state) => {
     return {
         guideBoxPos: state.guideBox.pos
@@ -35,36 +20,25 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setGuidBoxPos: (pos) => { dispatch(actions.setGuidBoxPos(pos)) }
+        setGuideBoxShow: (flag, itemPos) => { dispatch(actions.setGuideBoxShow(flag, itemPos)) },
+        setSelectItem: (id) => { dispatch(actions.setSelectItem(id)) }
     }
 }
 
 class Item extends Component {
-    setGuideBoxPos() {
-        console.log(this)
-        this.props.setGuideBoxPos({
-            tl : {x:10, y:0},
-            tc : {x:10, y:0},
-            tr : {x:10, y:0},
-            l : {x:10, y:0},
-            r : {x:10, y:0},
-            bl : {x:10, y:0},
-            bc : {x:10, y:0},
-            br : {x:10, y:0}
-        });
+    clickItem() {
+        const { id, left, top, width, height } = this.props;
+        this.props.setGuideBoxShow(true, { left, top, width, height });
+        this.props.setSelectItem(id);
     }
 
     render() {
-        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, children } = this.props;
+        const { left, top, width, height } = this.props;
 
-        if (isDragging) {
-            return null;
-        }
-
-        return connectDragSource(
-            <div style={{ left:left, top:top, position: "absolute", width: "100px", height: "100px", border: "1px solid #000"}} onClick={this.setGuideBoxPos.bind(this)}>Rect</div>
+        return (
+            <div style={{ left:left, top:top, position: "absolute", width:width, height:height, border: "1px solid #000"}} onClick={this.clickItem.bind(this)}>Rect</div>
         );
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragSource("Item", itemSpec, collect)(Item));
+export default connect(mapStateToProps, mapDispatchToProps)(Item);
