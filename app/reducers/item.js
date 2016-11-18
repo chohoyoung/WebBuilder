@@ -10,14 +10,17 @@ const initState = {
             top : 10,
             left: 10,
             width: 100,
-            height: 100
+            height: 100,
+            type: 'RECT'
         },
         {
             id: 2,
             top : 100,
             left: 100,
             width: 100,
-            height: 100
+            height: 100,
+            type: 'IMAGE',
+            src: 'http://nv2.tveta.naver.net/libs/1145/1145399/20161031164404-9ws0rxr5.png'
         }
     ]
 };

@@ -33,11 +33,19 @@ class Item extends Component {
         this.props.setSelectItem(id);
     }
 
-    render() {
-        const { left, top, width, height } = this.props;
+     render() {
+        const { left, top, width, height, info} = this.props;
+
+         let view;
+        if(info.type === 'RECT') {
+           view =  <img src={info.src} />;
+        } else {
+            view =  <img src={info.src} />;
+        }
+
 
         return (
-            <div style={{ left:left, top:top, position: "absolute", width:width, height:height, border: "1px solid #000"}} onClick={this.clickItem.bind(this)}>Rect</div>
+             <div style={{ left:left, top:top, position: "absolute", width:width, height:height, border: "1px solid #000"}} onClick={this.clickItem.bind(this)}>{view}</div>
         );
     }
 }

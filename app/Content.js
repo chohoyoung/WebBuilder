@@ -84,7 +84,7 @@ class Content extends Component {
 
         return connectDropTarget(
             <section className="about text-center" id="about" style={{height: "500px", position: 'relative'}} >
-                {this.props.items.map((item) => <Item key={item.id} id={item.id} left={item.left} top={item.top} width={item.width} height={item.height} />)}
+                {this.props.items.map((item) => <Item key={item.id} id={item.id} left={item.left} top={item.top} width={item.width} height={item.height} info={item} />)}
                 <GuideBox />
             </section>
         );
