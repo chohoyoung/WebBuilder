@@ -21,7 +21,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setGuideBoxShow: (flag, itemPos) => { dispatch(actions.setGuideBoxShow(flag, itemPos)) },
-        setSelectItem: (id) => { dispatch(actions.setSelectItem(id)) }
+        setSelectItem: (id) => { dispatch(actions.setSelectItem(id)) },
+        setGuideColonPos: (itemPos) => { dispatch(actions.setGuideColonPos(itemPos)) }
     }
 }
 

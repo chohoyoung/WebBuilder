@@ -37,6 +37,15 @@ export default function itemReducers(state = initState, action) {
                     top : {$set : action.top},
                 }
             }});
+        case constants.RESIZE_ITEM_BY_COLON:
+            let selectItemIdx1 = state.items.findIndex((item) => item.id === state.selectItemIds[0]);
+
+            return update(state, {items : {
+                [selectItemIdx1]: {
+                    width : {$set : action.width},
+                    height : {$set : action.height},
+                }
+            }});
         default:
             return state;
     }

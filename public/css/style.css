@@ -40,6 +40,8 @@ h1, h2{
     border-radius: 50%;
     z-index: 1;
     position: absolute;
+    margin-left: -3.5px;
+    margin-top: -3.5px;
 }
 
 

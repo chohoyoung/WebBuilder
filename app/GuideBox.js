@@ -5,6 +5,8 @@ import {DragSource} from 'react-dnd';
 import {connect} from 'react-redux';
 
 import * as actions from './actions';
+import {DragConstants} from './constants/DragConstants';
+import GuideColon from './GuideColon';
 
 const style = {
     width: "100px",
@@ -16,10 +18,9 @@ const style = {
 const guideBoxSpec = {
     // beginDrag에서 리턴한 값이 target의 drop에서 받는 getItem() 값이다. props는 현재 compoenent의 this.props를 넘겨준다. Can일경우 움직일때마다 루프
     beginDrag: function (props) {
-        const {guideBoxPos: pos} = props;
         const guideBoxPos = {
-            guideBoxColonPos: props.guideBoxColonPos,
             guideBoxLayoutPos: props.guideBoxLayoutPos,
+            type: DragConstants.type.GUIDE_BOX,
             isShow: props.isShow
         }
         return guideBoxPos;
@@ -30,7 +31,6 @@ const guideBoxSpec = {
 let collect = (connect, monitor) => {
     return {
         connectDragSource: connect.dragSource(),
-        connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     }
 }
@@ -38,7 +38,7 @@ let collect = (connect, monitor) => {
 // GuideBox Reduce와 props 연계
 const mapStateToProps = (state) => {
     return {
-        guideBoxColonPos: state.guideBox.colon,
+        guideColonPos: state.guideColon.colon,
         guideBoxLayoutPos: state.guideBox.layout,
         isShow: state.guideBox.isShow
     }
@@ -46,13 +46,13 @@ const mapStateToProps = (state) => {
 
 // GuideBox의 Layout의 style을 구축해서 리턴해준다.
 let getPosStyles = (props) => {
-    const { guideBoxColonPos } = props;
-    const transform = `translate3d(${props.guideBoxLayoutPos.left}px, ${props.guideBoxLayoutPos.top}px, 0)`;
+    const { guideBoxLayoutPos } = props;
+    const transform = `translate3d(${guideBoxLayoutPos.left}px, ${guideBoxLayoutPos.top}px, 0)`;
 
     return {
         position: 'absolute',
-        width: props.guideBoxLayoutPos.width,
-        height: props.guideBoxLayoutPos.height,
+        width: guideBoxLayoutPos.width,
+        height: guideBoxLayoutPos.height,
         transform: transform,
         WebkitTransform: transform
     };
@@ -61,7 +61,7 @@ let getPosStyles = (props) => {
 class GuideBox extends Component {
 
     render() {
-        const { hideSourceOnDrag, left, top, connectDragSource, isDragging, guideBoxColonPos, guideBoxLayoutPos, isShow, text} = this.props;
+        const {guideColonPos, connectDragSource, isDragging, isShow } = this.props;
 
         if (isDragging || !isShow) {
             return null;
@@ -69,7 +69,7 @@ class GuideBox extends Component {
 
         return connectDragSource(
             <div className="guide-layout" style={getPosStyles(this.props)}>
-                {/* Object.keys(guideBoxColonPos).map((key, idx) => <span key={idx} id={idx} className="top-left-resize-cursor guide-handle" style={{ left:guideBoxColonPos[key].left, top:guideBoxColonPos[key].top }}></span>) */}
+                { Object.keys(guideColonPos).map((key, idx) => <GuideColon key={idx} id={key} colonId={key} />) }
             </div>
         );
     }

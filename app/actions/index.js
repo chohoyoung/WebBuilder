@@ -1,6 +1,8 @@
 import * as constants from './ActionConstants';
 
-// GuideBox Action
+/*
+    GUIDE BOX ACTION
+ */
 export function setGuideBoxPos(guildBox) {
     return {
         type: constants.SET_GUIDEBOX_POS,
@@ -25,11 +27,14 @@ export function moveGuideBox(left, top) {
     }
 }
 
-// Content Action
-export function addItemInContents(newItem) {
+// 가이드 박스의 사이즈를 조절한다.
+export function resizeGuideBoxByColon(left, top, colonId, guideBoxLayoutPos) {
     return {
-        type: constants.ADD_ITEM_IN_CONTENT,
-        item: newItem
+        type: constants.RESIZE_GUIDEBOX_BY_COLON,
+        left: left,
+        top: top,
+        colonId: colonId,
+        guideBoxLayoutPos: guideBoxLayoutPos
     }
 }
 
@@ -51,5 +56,22 @@ export function moveItemPos(left, top) {
         left: left,
         top: top
     }
+}
 
+// colon을 움직일경우 호출 된다. width랑 height는 layout의 값, 새로 계산해도 되지만 그럼 성능이 더 느려질듯 해서 ...
+export function resizeItemByColon(width, height, name) {
+    return {
+        type: constants.RESIZE_ITEM_BY_COLON,
+        width: width,
+        height: height,
+        name: name
+    }
+}
+
+// Content Action
+export function addItemInContents(newItem) {
+    return {
+        type: constants.ADD_ITEM_IN_CONTENT,
+        item: newItem
+    }
 }
